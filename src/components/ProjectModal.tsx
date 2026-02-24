@@ -36,10 +36,10 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             onClick={onClose}
           />
           <motion.div
-            className="fixed inset-2 sm:inset-6 md:inset-10 lg:inset-y-12 lg:inset-x-24 xl:inset-x-40 z-50 bg-cream border border-mist rounded-2xl overflow-y-auto"
-            initial={{ opacity: 0, scale: 0.96, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 16 }}
+            className="fixed inset-0 top-12 sm:inset-6 md:inset-10 lg:inset-y-12 lg:inset-x-24 xl:inset-x-40 z-50 bg-cream sm:border border-mist sm:rounded-2xl rounded-t-2xl overflow-y-auto"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             role="dialog"
             aria-modal="true"

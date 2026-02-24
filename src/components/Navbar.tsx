@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -17,12 +17,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const t = requestAnimationFrame(() => setVisible(true));
-    return () => cancelAnimationFrame(t);
-  }, []);
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const navContainerRef = useRef<HTMLDivElement>(null);
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
@@ -56,11 +53,26 @@ export default function Navbar() {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
+  useEffect(() => {
+    if (!activeSection || !navContainerRef.current) {
+      setIndicatorStyle((s) => ({ ...s, opacity: 0 }));
+      return;
+    }
+    const linkEl = linkRefs.current[activeSection];
+    if (!linkEl || !navContainerRef.current) return;
+
+    const containerRect = navContainerRef.current.getBoundingClientRect();
+    const linkRect = linkEl.getBoundingClientRect();
+    setIndicatorStyle({
+      left: linkRect.left - containerRect.left,
+      width: linkRect.width,
+      opacity: 1,
+    });
+  }, [activeSection]);
+
   const handleNavClick = useCallback(
     (href: string) => {
       if (mobileOpen) setMobileOpen(false);
-      const id = href.replace("#", "");
-      setActiveSection(id);
     },
     [mobileOpen]
   );
@@ -76,13 +88,11 @@ export default function Navbar() {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-          visible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0",
+          "fixed top-0 left-0 right-0 z-50 transition-colors duration-500",
           scrolled
             ? "bg-cream/80 backdrop-blur-2xl border-b border-mist/60"
             : "bg-transparent"
         )}
-        style={{ willChange: "transform" }}
       >
         <div className="max-w-6xl mx-auto px-5 sm:px-6 h-12 sm:h-14 flex items-center justify-between">
           <a
@@ -97,31 +107,29 @@ export default function Navbar() {
             </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-7">
+          <div ref={navContainerRef} className="hidden md:flex items-center gap-7 relative">
+            <span
+              className="absolute -bottom-[5px] h-px bg-ink/50 transition-all duration-300 ease-out"
+              style={{
+                left: indicatorStyle.left,
+                width: indicatorStyle.width,
+                opacity: indicatorStyle.opacity,
+              }}
+            />
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
+                ref={(el) => { linkRefs.current[link.id] = el; }}
                 onClick={() => handleNavClick(link.href)}
                 className={cn(
-                  "text-[13px] transition-colors duration-300 relative",
+                  "text-[13px] transition-colors duration-300",
                   activeSection === link.id
                     ? "text-ink"
                     : "text-ash hover:text-ink"
                 )}
               >
                 {link.label}
-                {activeSection === link.id && (
-                  <motion.span
-                    className="absolute -bottom-[5px] left-0 right-0 h-px bg-ink/50"
-                    layoutId="nav-indicator"
-                    transition={{
-                      type: "spring",
-                      stiffness: 380,
-                      damping: 30,
-                    }}
-                  />
-                )}
               </a>
             ))}
           </div>
