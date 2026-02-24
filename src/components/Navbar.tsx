@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/context/ThemeContext";
 
 const navLinks = [
   { label: "Work", href: "#work", id: "work" },
@@ -18,6 +19,67 @@ export function smoothScrollTo(href: string) {
   if (!el) return;
   const top = el.getBoundingClientRect().top + window.scrollY - 56;
   window.scrollTo({ top, behavior: "smooth" });
+}
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className="relative w-8 h-8 flex items-center justify-center rounded-full border border-mist hover:border-stone transition-colors duration-300"
+      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+    >
+      {/* Sun icon (visible in dark mode) */}
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={cn(
+          "absolute text-ash transition-all duration-300",
+          theme === "dark"
+            ? "opacity-100 rotate-0 scale-100"
+            : "opacity-0 rotate-90 scale-0"
+        )}
+      >
+        <circle cx="12" cy="12" r="5" />
+        <line x1="12" y1="1" x2="12" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" />
+        <line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+
+      {/* Moon icon (visible in light mode) */}
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={cn(
+          "absolute text-ash transition-all duration-300",
+          theme === "light"
+            ? "opacity-100 rotate-0 scale-100"
+            : "opacity-0 -rotate-90 scale-0"
+        )}
+      >
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+    </button>
+  );
 }
 
 export default function Navbar() {
@@ -116,13 +178,12 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Mobile: sticky (in-flow, no iOS fixed bugs). Desktop: fixed (overlay). */}
       <nav
         className={cn(
           "sticky top-0 z-50 md:fixed md:left-0 md:right-0 transition-[background-color,border-color] duration-500 ease-out",
           scrolled
-            ? "bg-[#09090b] border-b border-mist/60"
-            : "bg-[#09090b] md:bg-transparent border-b border-transparent"
+            ? "bg-cream border-b border-mist/60"
+            : "bg-cream md:bg-transparent border-b border-transparent"
         )}
       >
         <div className="max-w-6xl mx-auto px-5 sm:px-6 h-12 sm:h-14 flex items-center justify-between">
@@ -174,41 +235,45 @@ export default function Navbar() {
             ))}
           </div>
 
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden relative w-8 h-8 flex items-center justify-center -mr-1.5"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-          >
-            <span className="w-5 h-3.5 flex flex-col justify-between">
-              <motion.span
-                className="block w-full h-[1px] bg-ink origin-center"
-                animate={
-                  mobileOpen ? { rotate: 45, y: 5.5 } : { rotate: 0, y: 0 }
-                }
-                transition={{ duration: 0.25 }}
-              />
-              <motion.span
-                className="block w-full h-[1px] bg-ink"
-                animate={{ opacity: mobileOpen ? 0 : 1 }}
-                transition={{ duration: 0.15 }}
-              />
-              <motion.span
-                className="block w-full h-[1px] bg-ink origin-center"
-                animate={
-                  mobileOpen ? { rotate: -45, y: -5.5 } : { rotate: 0, y: 0 }
-                }
-                transition={{ duration: 0.25 }}
-              />
-            </span>
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden relative w-8 h-8 flex items-center justify-center -mr-1.5"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+            >
+              <span className="w-5 h-3.5 flex flex-col justify-between">
+                <motion.span
+                  className="block w-full h-[1px] bg-ink origin-center"
+                  animate={
+                    mobileOpen ? { rotate: 45, y: 5.5 } : { rotate: 0, y: 0 }
+                  }
+                  transition={{ duration: 0.25 }}
+                />
+                <motion.span
+                  className="block w-full h-[1px] bg-ink"
+                  animate={{ opacity: mobileOpen ? 0 : 1 }}
+                  transition={{ duration: 0.15 }}
+                />
+                <motion.span
+                  className="block w-full h-[1px] bg-ink origin-center"
+                  animate={
+                    mobileOpen ? { rotate: -45, y: -5.5 } : { rotate: 0, y: 0 }
+                  }
+                  transition={{ duration: 0.25 }}
+                />
+              </span>
+            </button>
+          </div>
         </div>
       </nav>
 
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-[#09090b] flex items-center justify-center"
+            className="fixed inset-0 z-40 bg-cream flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useTheme } from "@/context/ThemeContext";
 
 interface Particle {
   x: number;
@@ -18,6 +19,7 @@ export default function FlowField() {
   const particlesRef = useRef<Particle[]>([]);
   const reducedMotion = useReducedMotion();
   const timeRef = useRef(0);
+  const { theme } = useTheme();
 
   const noise = useCallback((x: number, y: number, t: number) => {
     return (
@@ -46,6 +48,8 @@ export default function FlowField() {
     };
     resize();
     window.addEventListener("resize", resize);
+
+    const rgb = getComputedStyle(document.documentElement).getPropertyValue("--t-flow-particle").trim();
 
     const PARTICLE_COUNT = 35;
     particlesRef.current = Array.from({ length: PARTICLE_COUNT }, () => ({
@@ -89,7 +93,7 @@ export default function FlowField() {
         const alpha = Math.sin((p.life / p.maxLife) * Math.PI) * 0.15;
         ctx.beginPath();
         ctx.arc(p.x, p.y, 1, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(122, 122, 130, ${alpha})`;
+        ctx.fillStyle = `rgba(${rgb},${alpha})`;
         ctx.fill();
       }
 
@@ -102,7 +106,7 @@ export default function FlowField() {
       cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", resize);
     };
-  }, [reducedMotion, noise]);
+  }, [reducedMotion, noise, theme]);
 
   if (reducedMotion) return null;
 

@@ -4,6 +4,7 @@ import { useRef, useMemo, useEffect, useState, useCallback } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import * as THREE from "three";
+import { useTheme } from "@/context/ThemeContext";
 
 const MORPH_DURATION = 3.0;
 const SETTLE_DURATION = 1.8;
@@ -52,16 +53,39 @@ function sampleRodCurve(n: number) {
   return pts;
 }
 
+const THEME_CONFIG = {
+  dark: {
+    materialColor: "#908474",
+    settledOpacity: 0.45,
+    ambientIntensity: 0.35,
+    dirLight1: { color: "#e0d8ce", intensity: 1 },
+    dirLight2: { color: "#b0a898", intensity: 0.5 },
+    pointLight: { color: "#d0c8bc", intensity: 0.4 },
+    particleColor: "#555560",
+  },
+  light: {
+    materialColor: "#a09080",
+    settledOpacity: 0.35,
+    ambientIntensity: 0.5,
+    dirLight1: { color: "#d8d0c4", intensity: 0.8 },
+    dirLight2: { color: "#c0b8a8", intensity: 0.4 },
+    pointLight: { color: "#d8d0c0", intensity: 0.3 },
+    particleColor: "#8a8a90",
+  },
+};
+
 function KineticSculpture({
   mouse,
   skipIntro,
   onIntroComplete,
   isMobile,
+  themeConfig,
 }: {
   mouse: { x: number; y: number };
   skipIntro: boolean;
   onIntroComplete: () => void;
   isMobile: boolean;
+  themeConfig: (typeof THEME_CONFIG)["dark"];
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const target = useMemo(() => ({ rotX: 0, rotY: 0 }), []);
@@ -151,7 +175,7 @@ function KineticSculpture({
     }
 
     const scl = THREE.MathUtils.lerp(2.4, 2.0, settleP);
-    const opa = THREE.MathUtils.lerp(0.95, 0.45, settleP);
+    const opa = THREE.MathUtils.lerp(0.95, themeConfig.settledOpacity, settleP);
     const metal = THREE.MathUtils.lerp(0.95, 0.8, settleP);
     const rough = THREE.MathUtils.lerp(0.08, 0.3, settleP);
 
@@ -179,11 +203,11 @@ function KineticSculpture({
     >
       <mesh ref={meshRef} geometry={geometry} scale={skipIntro ? 2.0 : 2.4}>
         <meshStandardMaterial
-          color="#908474"
+          color={themeConfig.materialColor}
           roughness={skipIntro ? 0.3 : 0.08}
           metalness={skipIntro ? 0.8 : 0.95}
           transparent
-          opacity={skipIntro ? 0.45 : 0.95}
+          opacity={skipIntro ? themeConfig.settledOpacity : 0.95}
           side={THREE.DoubleSide}
         />
       </mesh>
@@ -194,9 +218,11 @@ function KineticSculpture({
 function AmbientParticles({
   visible,
   count,
+  color,
 }: {
   visible: boolean;
   count: number;
+  color: string;
 }) {
   const ref = useRef<THREE.Points>(null);
   const opRef = useRef(0);
@@ -234,7 +260,7 @@ function AmbientParticles({
       </bufferGeometry>
       <pointsMaterial
         size={0.012}
-        color="#555560"
+        color={color}
         transparent
         opacity={0}
         sizeAttenuation
@@ -260,6 +286,8 @@ export default function Hero3D({
 
   const [particlesOn, setParticlesOn] = useState(skipIntro);
   const [isMobile, setIsMobile] = useState(false);
+  const { theme } = useTheme();
+  const config = THEME_CONFIG[theme];
 
   useEffect(() => {
     setIsMobile(
@@ -283,29 +311,35 @@ export default function Hero3D({
         gl={{ antialias: !isMobile, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.35} />
+        <ambientLight intensity={config.ambientIntensity} />
         <directionalLight
           position={[5, 5, 5]}
-          intensity={1}
-          color="#e0d8ce"
+          intensity={config.dirLight1.intensity}
+          color={config.dirLight1.color}
         />
         <directionalLight
           position={[-4, -2, 3]}
-          intensity={0.5}
-          color="#b0a898"
+          intensity={config.dirLight2.intensity}
+          color={config.dirLight2.color}
         />
         {!isMobile && (
-          <pointLight position={[2, -1, 4]} intensity={0.4} color="#d0c8bc" />
+          <pointLight
+            position={[2, -1, 4]}
+            intensity={config.pointLight.intensity}
+            color={config.pointLight.color}
+          />
         )}
         <KineticSculpture
           mouse={mouse}
           skipIntro={skipIntro}
           onIntroComplete={stableCallback}
           isMobile={isMobile}
+          themeConfig={config}
         />
         <AmbientParticles
           visible={particlesOn}
           count={isMobile ? 15 : 40}
+          color={config.particleColor}
         />
       </Canvas>
     </div>
