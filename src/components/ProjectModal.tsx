@@ -1,0 +1,138 @@
+"use client";
+
+import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import type { Project } from "@/data/content";
+
+interface ProjectModalProps {
+  project: Project | null;
+  onClose: () => void;
+}
+
+export default function ProjectModal({ project, onClose }: ProjectModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = project ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [project]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      {project && (
+        <>
+          <motion.div
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={onClose}
+          />
+          <motion.div
+            className="fixed inset-4 sm:inset-8 md:inset-12 lg:inset-y-12 lg:inset-x-24 xl:inset-x-40 z-50 bg-cream border border-mist rounded-2xl overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.96, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 16 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Project: ${project.title}`}
+          >
+            <div className="p-8 sm:p-10 lg:p-14">
+              <div className="flex items-start justify-between mb-10">
+                <div>
+                  <p className="font-mono text-[10px] text-stone tracking-[0.3em] uppercase mb-2">
+                    {project.id}
+                  </p>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight tracking-tight">
+                    {project.title}
+                  </h2>
+                  <p className="mt-2 text-base text-ash">{project.tagline}</p>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="shrink-0 w-9 h-9 rounded-full border border-mist flex items-center justify-center text-ash hover:text-ink hover:border-stone transition-colors"
+                  aria-label="Close"
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+
+              <p className="text-charcoal leading-relaxed mb-10 max-w-3xl">
+                {project.description}
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                {[
+                  { label: "Problem", text: project.problem },
+                  { label: "Approach", text: project.approach },
+                  { label: "Result", text: project.result },
+                ].map((section) => (
+                  <div key={section.label}>
+                    <h3 className="font-mono text-[10px] text-stone tracking-[0.2em] uppercase mb-3">
+                      {section.label}
+                    </h3>
+                    <p className="text-charcoal text-sm leading-relaxed">
+                      {section.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-1.5 mb-8">
+                {project.stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2.5 py-1 text-[10px] font-mono bg-warm-white border border-mist text-ash rounded-md"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-8 mb-8">
+                {project.metrics.map((metric) => (
+                  <p key={metric} className="text-sm font-mono text-ash">
+                    {metric}
+                  </p>
+                ))}
+              </div>
+
+              <div className="flex gap-6 pt-8 border-t border-mist">
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-ash hover:text-ink transition-colors duration-300 font-mono"
+                  >
+                    GitHub →
+                  </a>
+                )}
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-ash hover:text-ink transition-colors duration-300 font-mono"
+                  >
+                    Live Demo →
+                  </a>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
