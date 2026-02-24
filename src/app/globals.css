@@ -36,10 +36,6 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -62,7 +58,7 @@ body {
   color: #b8b8be;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 ::selection {

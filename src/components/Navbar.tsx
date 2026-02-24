@@ -13,6 +13,13 @@ const navLinks = [
   { label: "Contact", href: "#contact", id: "contact" },
 ];
 
+function smoothScrollTo(href: string) {
+  const el = document.querySelector(href);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - 60;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -89,8 +96,10 @@ export default function Navbar() {
   }, [activeSection]);
 
   const handleNavClick = useCallback(
-    (href: string) => {
+    (e: React.MouseEvent, href: string) => {
+      e.preventDefault();
       if (mobileOpen) setMobileOpen(false);
+      smoothScrollTo(href);
     },
     [mobileOpen]
   );
@@ -111,10 +120,18 @@ export default function Navbar() {
             ? "bg-[#09090b] border-b border-mist/60"
             : "bg-transparent"
         )}
+        style={{
+          WebkitTransform: "translate3d(0,0,0)",
+          transform: "translate3d(0,0,0)",
+        }}
       >
         <div className="max-w-6xl mx-auto px-5 sm:px-6 h-12 sm:h-14 flex items-center justify-between">
           <a
             href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             className="hover:opacity-70 transition-opacity leading-none"
           >
             <span
@@ -144,7 +161,7 @@ export default function Navbar() {
                 ref={(el) => {
                   linkRefs.current[link.id] = el;
                 }}
-                onClick={() => handleNavClick(link.href)}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={cn(
                   "text-[13px] transition-colors duration-300",
                   activeSection === link.id
@@ -159,29 +176,31 @@ export default function Navbar() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden relative w-5 h-3.5 flex flex-col justify-between"
+            className="md:hidden relative w-8 h-8 flex items-center justify-center -mr-1.5"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
-            <motion.span
-              className="block w-full h-[1px] bg-ink origin-center"
-              animate={
-                mobileOpen ? { rotate: 45, y: 5.5 } : { rotate: 0, y: 0 }
-              }
-              transition={{ duration: 0.25 }}
-            />
-            <motion.span
-              className="block w-full h-[1px] bg-ink"
-              animate={{ opacity: mobileOpen ? 0 : 1 }}
-              transition={{ duration: 0.15 }}
-            />
-            <motion.span
-              className="block w-full h-[1px] bg-ink origin-center"
-              animate={
-                mobileOpen ? { rotate: -45, y: -5.5 } : { rotate: 0, y: 0 }
-              }
-              transition={{ duration: 0.25 }}
-            />
+            <span className="w-5 h-3.5 flex flex-col justify-between">
+              <motion.span
+                className="block w-full h-[1px] bg-ink origin-center"
+                animate={
+                  mobileOpen ? { rotate: 45, y: 5.5 } : { rotate: 0, y: 0 }
+                }
+                transition={{ duration: 0.25 }}
+              />
+              <motion.span
+                className="block w-full h-[1px] bg-ink"
+                animate={{ opacity: mobileOpen ? 0 : 1 }}
+                transition={{ duration: 0.15 }}
+              />
+              <motion.span
+                className="block w-full h-[1px] bg-ink origin-center"
+                animate={
+                  mobileOpen ? { rotate: -45, y: -5.5 } : { rotate: 0, y: 0 }
+                }
+                transition={{ duration: 0.25 }}
+              />
+            </span>
           </button>
         </div>
       </nav>
@@ -189,18 +208,22 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-[#09090b]/95 flex items-center justify-center"
+            className="fixed inset-0 z-40 bg-[#09090b] flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            style={{
+              WebkitTransform: "translate3d(0,0,0)",
+              transform: "translate3d(0,0,0)",
+            }}
           >
             <nav className="flex flex-col items-center gap-7">
               {navLinks.map((link, i) => (
                 <motion.a
                   key={link.href}
                   href={link.href}
-                  onClick={() => handleNavClick(link.href)}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className={cn(
                     "text-xl font-medium",
                     activeSection === link.id ? "text-ink" : "text-ash"

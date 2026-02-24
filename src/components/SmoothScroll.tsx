@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -11,17 +11,12 @@ export default function SmoothScroll({
 }) {
   const lenisRef = useRef<Lenis | null>(null);
   const reducedMotion = useReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const touch =
       "ontouchstart" in window || navigator.maxTouchPoints > 0;
     const narrow = window.innerWidth < 768;
-    setIsMobile(touch || narrow);
-  }, []);
-
-  useEffect(() => {
-    if (reducedMotion || isMobile) return;
+    if (reducedMotion || touch || narrow) return;
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -39,8 +34,9 @@ export default function SmoothScroll({
 
     return () => {
       lenis.destroy();
+      lenisRef.current = null;
     };
-  }, [reducedMotion, isMobile]);
+  }, [reducedMotion]);
 
   return <>{children}</>;
 }

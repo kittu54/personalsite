@@ -19,9 +19,24 @@ const Hero3D = lazy(() => import("./Hero3D"));
 export default function Hero() {
   const mouse = useMousePosition();
   const { scrollY } = useScroll();
+  const isMobileRef = useRef(false);
+
+  useEffect(() => {
+    isMobileRef.current =
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.innerWidth < 768;
+  }, []);
+
   const opacity = useTransform(scrollY, [0, 600], [1, 0]);
-  const y = useTransform(scrollY, [0, 600], [0, 80]);
-  const scale = useTransform(scrollY, [0, 600], [1, 0.96]);
+  const y = useTransform(scrollY, (v) => {
+    if (isMobileRef.current) return 0;
+    return Math.min(v / 600, 1) * 80;
+  });
+  const scale = useTransform(scrollY, (v) => {
+    if (isMobileRef.current) return 1;
+    return 1 - Math.min(v / 600, 1) * 0.04;
+  });
 
   const [introComplete, setIntroComplete] = useState(false);
   const [skipIntro, setSkipIntro] = useState(false);

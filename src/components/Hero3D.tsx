@@ -18,15 +18,18 @@ function easeInOutCubic(t: number) {
 
 function sampleKnotCurve(n: number) {
   const pts: THREE.Vector3[] = [];
-  const p = 2, q = 3, R = 1, r = 0.35;
+  const p = 2,
+    q = 3,
+    R = 1,
+    r = 0.35;
   for (let i = 0; i < n; i++) {
     const t = i / n;
     const phi = t * Math.PI * 2 * p;
     pts.push(
       new THREE.Vector3(
-        (R + r * Math.cos(q * phi / p)) * Math.cos(phi),
-        (R + r * Math.cos(q * phi / p)) * Math.sin(phi),
-        r * Math.sin(q * phi / p)
+        (R + r * Math.cos((q * phi) / p)) * Math.cos(phi),
+        (R + r * Math.cos((q * phi) / p)) * Math.sin(phi),
+        r * Math.sin((q * phi) / p)
       )
     );
   }
@@ -53,10 +56,12 @@ function KineticSculpture({
   mouse,
   skipIntro,
   onIntroComplete,
+  isMobile,
 }: {
   mouse: { x: number; y: number };
   skipIntro: boolean;
   onIntroComplete: () => void;
+  isMobile: boolean;
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const target = useMemo(() => ({ rotX: 0, rotY: 0 }), []);
@@ -65,16 +70,34 @@ function KineticSculpture({
   onCompleteRef.current = onIntroComplete;
 
   const { rodPos, knotPos, geometry } = useMemo(() => {
-    const segments = 160;
-    const radial = 20;
+    const segments = isMobile ? 80 : 160;
+    const radial = isMobile ? 12 : 20;
     const tube = 0.28;
 
-    const curvePts = 256;
-    const knotCurve = new THREE.CatmullRomCurve3(sampleKnotCurve(curvePts), true);
-    const rodCurve = new THREE.CatmullRomCurve3(sampleRodCurve(curvePts), true);
+    const curvePts = isMobile ? 128 : 256;
+    const knotCurve = new THREE.CatmullRomCurve3(
+      sampleKnotCurve(curvePts),
+      true
+    );
+    const rodCurve = new THREE.CatmullRomCurve3(
+      sampleRodCurve(curvePts),
+      true
+    );
 
-    const knotGeo = new THREE.TubeGeometry(knotCurve, segments, tube, radial, true);
-    const rodGeo = new THREE.TubeGeometry(rodCurve, segments, tube, radial, true);
+    const knotGeo = new THREE.TubeGeometry(
+      knotCurve,
+      segments,
+      tube,
+      radial,
+      true
+    );
+    const rodGeo = new THREE.TubeGeometry(
+      rodCurve,
+      segments,
+      tube,
+      radial,
+      true
+    );
 
     const kp = new Float32Array(knotGeo.attributes.position.array);
     const rp = new Float32Array(rodGeo.attributes.position.array);
@@ -88,7 +111,7 @@ function KineticSculpture({
     rodGeo.dispose();
 
     return { rodPos: rp, knotPos: kp, geometry: knotGeo };
-  }, [skipIntro]);
+  }, [skipIntro, isMobile]);
 
   useFrame((state) => {
     if (!meshRef.current) return;
@@ -137,8 +160,10 @@ function KineticSculpture({
     mat.roughness = rough;
     mesh.scale.setScalar(scl);
 
-    target.rotX = THREE.MathUtils.lerp(target.rotX, mouse.y * 0.3, 0.02);
-    target.rotY = THREE.MathUtils.lerp(target.rotY, mouse.x * 0.3, 0.02);
+    if (!isMobile) {
+      target.rotX = THREE.MathUtils.lerp(target.rotX, mouse.y * 0.3, 0.02);
+      target.rotY = THREE.MathUtils.lerp(target.rotY, mouse.x * 0.3, 0.02);
+    }
 
     const introRotBoost = skipIntro ? 1 : 1 + (1 - morphP) * 2;
     mesh.rotation.x = target.rotX + Math.sin(t * 0.25) * 0.1;
@@ -166,8 +191,13 @@ function KineticSculpture({
   );
 }
 
-function AmbientParticles({ visible }: { visible: boolean }) {
-  const count = 40;
+function AmbientParticles({
+  visible,
+  count,
+}: {
+  visible: boolean;
+  count: number;
+}) {
   const ref = useRef<THREE.Points>(null);
   const opRef = useRef(0);
 
@@ -179,12 +209,16 @@ function AmbientParticles({ visible }: { visible: boolean }) {
       pos[i * 3 + 2] = (Math.random() - 0.5) * 6;
     }
     return pos;
-  }, []);
+  }, [count]);
 
   useFrame((state) => {
     if (!ref.current) return;
     ref.current.rotation.y = state.clock.getElapsedTime() * 0.01;
-    opRef.current = THREE.MathUtils.lerp(opRef.current, visible ? 0.4 : 0, 0.02);
+    opRef.current = THREE.MathUtils.lerp(
+      opRef.current,
+      visible ? 0.4 : 0,
+      0.02
+    );
     (ref.current.material as THREE.PointsMaterial).opacity = opRef.current;
   });
 
@@ -215,12 +249,26 @@ interface Hero3DProps {
   onIntroComplete: () => void;
 }
 
-export default function Hero3D({ mouse, skipIntro, onIntroComplete }: Hero3DProps) {
+export default function Hero3D({
+  mouse,
+  skipIntro,
+  onIntroComplete,
+}: Hero3DProps) {
   const onCompleteRef = useRef(onIntroComplete);
   onCompleteRef.current = onIntroComplete;
   const stableCallback = useCallback(() => onCompleteRef.current(), []);
 
   const [particlesOn, setParticlesOn] = useState(skipIntro);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(
+      "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.innerWidth < 768
+    );
+  }, []);
+
   useEffect(() => {
     if (skipIntro) return;
     const t = setTimeout(() => setParticlesOn(true), MORPH_DURATION * 900);
@@ -231,20 +279,34 @@ export default function Hero3D({ mouse, skipIntro, onIntroComplete }: Hero3DProp
     <div className="absolute inset-0 -z-10">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 45 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
+        dpr={isMobile ? [1, 1] : [1, 1.5]}
+        gl={{ antialias: !isMobile, alpha: true }}
         style={{ background: "transparent" }}
       >
         <ambientLight intensity={0.35} />
-        <directionalLight position={[5, 5, 5]} intensity={1} color="#e0d8ce" />
-        <directionalLight position={[-4, -2, 3]} intensity={0.5} color="#b0a898" />
-        <pointLight position={[2, -1, 4]} intensity={0.4} color="#d0c8bc" />
+        <directionalLight
+          position={[5, 5, 5]}
+          intensity={1}
+          color="#e0d8ce"
+        />
+        <directionalLight
+          position={[-4, -2, 3]}
+          intensity={0.5}
+          color="#b0a898"
+        />
+        {!isMobile && (
+          <pointLight position={[2, -1, 4]} intensity={0.4} color="#d0c8bc" />
+        )}
         <KineticSculpture
           mouse={mouse}
           skipIntro={skipIntro}
           onIntroComplete={stableCallback}
+          isMobile={isMobile}
         />
-        <AmbientParticles visible={particlesOn} />
+        <AmbientParticles
+          visible={particlesOn}
+          count={isMobile ? 15 : 40}
+        />
       </Canvas>
     </div>
   );
