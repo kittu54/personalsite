@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -11,7 +11,7 @@ interface MagneticButtonProps {
   href?: string;
   variant?: "primary" | "secondary" | "ghost";
   as?: "button" | "a";
-  download?: boolean;
+  download?: boolean | string;
 }
 
 export default function MagneticButton({
@@ -25,9 +25,14 @@ export default function MagneticButton({
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isTouch, setIsTouch] = useState(false);
+
+  useEffect(() => {
+    setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  }, []);
 
   const handleMouse = (e: React.MouseEvent) => {
-    if (!ref.current) return;
+    if (isTouch || !ref.current) return;
     const { left, top, width, height } = ref.current.getBoundingClientRect();
     setPosition({
       x: (e.clientX - left - width / 2) * 0.12,
@@ -57,9 +62,9 @@ export default function MagneticButton({
       <Component
         href={href}
         onClick={onClick}
-        download={download || undefined}
+        download={download ? (typeof download === "string" ? download : "") : undefined}
         className={cn(
-          "relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium tracking-wide transition-all duration-300",
+          "relative inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 rounded-full text-sm font-medium tracking-wide transition-all duration-300",
           variants[variant],
           className
         )}

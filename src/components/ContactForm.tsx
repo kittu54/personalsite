@@ -33,10 +33,10 @@ export default function ContactForm() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <SectionTransition id="contact" className="py-28 px-6">
+    <SectionTransition id="contact" className="py-16 sm:py-24 md:py-28 px-5 sm:px-6">
       <div className="max-w-2xl mx-auto" ref={ref}>
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
@@ -61,7 +61,7 @@ export default function ContactForm() {
               href={link.href}
               target={link.label === "Email" ? undefined : "_blank"}
               rel={link.label === "Email" ? undefined : "noopener noreferrer"}
-              className="group flex items-center justify-between px-6 py-5 rounded-2xl border border-mist bg-warm-white hover:border-stone/50 transition-all duration-300"
+              className="group flex items-center justify-between px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border border-mist bg-warm-white hover:border-stone/50 transition-all duration-300"
               initial={{ opacity: 0, y: 16 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{
@@ -75,7 +75,7 @@ export default function ContactForm() {
                 <p className="font-mono text-[10px] text-stone tracking-[0.15em] uppercase mb-1.5">
                   {link.label}
                 </p>
-                <p className="text-sm text-ink">{link.display}</p>
+                <p className="text-sm text-ink break-all sm:break-normal">{link.display}</p>
               </div>
               <span className="text-stone group-hover:text-ink group-hover:translate-x-0.5 transition-all duration-300">
                 <svg

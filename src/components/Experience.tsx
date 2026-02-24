@@ -10,10 +10,10 @@ export default function Experience() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <SectionTransition id="experience" className="py-28 px-6">
+    <SectionTransition id="experience" className="py-16 sm:py-24 md:py-28 px-5 sm:px-6">
       <div className="max-w-4xl mx-auto" ref={ref}>
         <motion.div
-          className="mb-14"
+          className="mb-10 sm:mb-14"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}

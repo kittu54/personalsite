@@ -79,11 +79,11 @@ export default function FeaturedProjects() {
   const headerInView = useInView(headerRef, { once: true, margin: "-80px" });
 
   return (
-    <SectionTransition id="work" className="py-28 px-6">
+    <SectionTransition id="work" className="py-16 sm:py-24 md:py-28 px-5 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div
           ref={headerRef}
-          className="mb-14"
+          className="mb-10 sm:mb-14"
           initial={{ opacity: 0, y: 20 }}
           animate={headerInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}

@@ -36,7 +36,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             onClick={onClose}
           />
           <motion.div
-            className="fixed inset-4 sm:inset-8 md:inset-12 lg:inset-y-12 lg:inset-x-24 xl:inset-x-40 z-50 bg-cream border border-mist rounded-2xl overflow-y-auto"
+            className="fixed inset-2 sm:inset-6 md:inset-10 lg:inset-y-12 lg:inset-x-24 xl:inset-x-40 z-50 bg-cream border border-mist rounded-2xl overflow-y-auto"
             initial={{ opacity: 0, scale: 0.96, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 16 }}
@@ -45,13 +45,13 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             aria-modal="true"
             aria-label={`Project: ${project.title}`}
           >
-            <div className="p-8 sm:p-10 lg:p-14">
+            <div className="p-5 sm:p-8 md:p-10 lg:p-14">
               <div className="flex items-start justify-between mb-10">
                 <div>
                   <p className="font-mono text-[10px] text-stone tracking-[0.3em] uppercase mb-2">
                     {project.id}
                   </p>
-                  <h2 className="text-3xl sm:text-4xl font-bold text-ink leading-tight tracking-tight">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink leading-tight tracking-tight">
                     {project.title}
                   </h2>
                   <p className="mt-2 text-base text-ash">{project.tagline}</p>

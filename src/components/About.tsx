@@ -11,9 +11,9 @@ export default function About() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <SectionTransition id="about" className="py-28 px-6">
+    <SectionTransition id="about" className="py-16 sm:py-24 md:py-28 px-5 sm:px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20" ref={ref}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20" ref={ref}>
           <div>
             <motion.p
               className="font-mono text-[10px] text-stone tracking-[0.3em] uppercase mb-3"
@@ -24,7 +24,7 @@ export default function About() {
               About
             </motion.p>
             <motion.h2
-              className="text-3xl sm:text-4xl font-bold text-ink mb-8 leading-snug tracking-tight"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink mb-6 sm:mb-8 leading-snug tracking-tight"
               initial={{ opacity: 0, y: 16 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.08 }}

@@ -47,7 +47,7 @@ export default function Hero() {
   return (
     <motion.div
       style={{ opacity, y, scale }}
-      className="relative min-h-screen flex flex-col items-center justify-center px-6"
+      className="relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-6"
     >
       <Suspense fallback={<div className="absolute inset-0 -z-10" />}>
         <Hero3D
@@ -73,7 +73,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic leading-[1.15] tracking-[-0.01em] text-ink"
+            className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl italic leading-[1.2] tracking-[-0.01em] text-ink"
             style={{ fontFamily: "var(--font-serif)" }}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -87,7 +87,7 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            className="mt-6 text-[15px] sm:text-base text-ash max-w-lg mx-auto leading-[1.7]"
+            className="mt-5 text-[14px] sm:text-[15px] text-ash max-w-lg mx-auto leading-[1.7] px-2 sm:px-0"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -116,7 +116,7 @@ export default function Hero() {
               as="a"
               href={siteConfig.resumeUrl}
               variant="secondary"
-              download
+              download="Darshil_Patel_Resume.pdf"
             >
               Resume
             </MagneticButton>

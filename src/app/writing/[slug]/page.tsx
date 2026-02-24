@@ -23,7 +23,7 @@ export default function BlogPostPage() {
     <>
       <Navbar />
       <motion.article
-        className="min-h-screen pt-28 pb-20 px-6"
+        className="min-h-screen pt-20 sm:pt-28 pb-16 sm:pb-20 px-5 sm:px-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -47,7 +47,7 @@ export default function BlogPostPage() {
               <span className="font-mono text-[10px] text-stone">{post.readTime}</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-bold text-ink leading-tight tracking-tight mb-10">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink leading-tight tracking-tight mb-8 sm:mb-10">
               {post.title}
             </h1>
           </motion.div>
