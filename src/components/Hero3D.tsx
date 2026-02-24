@@ -4,7 +4,6 @@ import { useRef, useMemo, useEffect, useState, useCallback } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import * as THREE from "three";
-import { useTheme } from "@/context/ThemeContext";
 
 const MORPH_DURATION = 3.0;
 const SETTLE_DURATION = 1.8;
@@ -286,8 +285,24 @@ export default function Hero3D({
 
   const [particlesOn, setParticlesOn] = useState(skipIntro);
   const [isMobile, setIsMobile] = useState(false);
-  const { theme } = useTheme();
-  const config = THEME_CONFIG[theme];
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    const readTheme = () => {
+      const attr = document.documentElement.getAttribute("data-theme");
+      setCurrentTheme(attr === "light" ? "light" : "dark");
+    };
+    readTheme();
+
+    const observer = new MutationObserver(readTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const config = THEME_CONFIG[currentTheme];
 
   useEffect(() => {
     setIsMobile(
