@@ -64,12 +64,12 @@ const THEME_CONFIG = {
     particleColor: "#555560",
   },
   light: {
-    materialColor: "#a09080",
-    settledOpacity: 0.35,
-    ambientIntensity: 0.5,
-    dirLight1: { color: "#d8d0c4", intensity: 0.8 },
-    dirLight2: { color: "#c0b8a8", intensity: 0.4 },
-    pointLight: { color: "#d8d0c0", intensity: 0.3 },
+    materialColor: "#6a5a4a",
+    settledOpacity: 0.55,
+    ambientIntensity: 0.6,
+    dirLight1: { color: "#c8c0b4", intensity: 1.2 },
+    dirLight2: { color: "#a8a090", intensity: 0.6 },
+    pointLight: { color: "#b8b0a0", intensity: 0.5 },
     particleColor: "#8a8a90",
   },
 };
