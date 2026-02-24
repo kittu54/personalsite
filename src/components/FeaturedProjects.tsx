@@ -32,15 +32,15 @@ function ProjectCard({
       className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
     >
       <GlassCard onClick={onClick} className="h-full">
-        <div className="flex flex-col h-full min-h-[220px]">
-          <p className="font-mono text-[10px] text-stone tracking-[0.2em] uppercase mb-4">
+        <div className="flex flex-col h-full min-h-[200px] sm:min-h-[220px]">
+          <p className="font-mono text-[9px] sm:text-[10px] text-stone tracking-[0.2em] uppercase mb-3 sm:mb-4">
             {project.id}
           </p>
 
-          <h3 className="text-xl font-semibold text-ink mb-2 leading-snug">
+          <h3 className="text-lg sm:text-xl font-semibold text-ink mb-1.5 sm:mb-2 leading-snug">
             {project.title}
           </h3>
-          <p className="text-sm text-ash leading-relaxed mb-5 flex-1">
+          <p className="text-[13px] sm:text-sm text-ash leading-relaxed mb-4 sm:mb-5 flex-1">
             {project.tagline}
           </p>
 
@@ -91,12 +91,12 @@ export default function FeaturedProjects() {
           <p className="font-mono text-[10px] text-stone tracking-[0.3em] uppercase mb-3">
             Featured Work
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-ink tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink tracking-tight">
             Selected projects
           </h2>
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
           {projects.map((project, i) => (
             <ProjectCard
               key={project.id}

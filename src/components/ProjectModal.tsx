@@ -46,15 +46,15 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             aria-label={`Project: ${project.title}`}
           >
             <div className="p-5 sm:p-8 md:p-10 lg:p-14">
-              <div className="flex items-start justify-between mb-10">
-                <div>
-                  <p className="font-mono text-[10px] text-stone tracking-[0.3em] uppercase mb-2">
+              <div className="flex items-start justify-between gap-3 mb-6 sm:mb-10">
+                <div className="min-w-0">
+                  <p className="font-mono text-[9px] sm:text-[10px] text-stone tracking-[0.3em] uppercase mb-2">
                     {project.id}
                   </p>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink leading-tight tracking-tight">
+                  <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-ink leading-tight tracking-tight">
                     {project.title}
                   </h2>
-                  <p className="mt-2 text-base text-ash">{project.tagline}</p>
+                  <p className="mt-1.5 sm:mt-2 text-[13px] sm:text-base text-ash">{project.tagline}</p>
                 </div>
                 <button
                   onClick={onClose}
@@ -67,11 +67,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 </button>
               </div>
 
-              <p className="text-charcoal leading-relaxed mb-10 max-w-3xl">
+              <p className="text-[13px] sm:text-base text-charcoal leading-relaxed mb-6 sm:mb-10 max-w-3xl">
                 {project.description}
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-10">
                 {[
                   { label: "Problem", text: project.problem },
                   { label: "Approach", text: project.approach },
@@ -81,14 +81,14 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                     <h3 className="font-mono text-[10px] text-stone tracking-[0.2em] uppercase mb-3">
                       {section.label}
                     </h3>
-                    <p className="text-charcoal text-sm leading-relaxed">
+                    <p className="text-charcoal text-[13px] sm:text-sm leading-relaxed">
                       {section.text}
                     </p>
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-1.5 mb-8">
+              <div className="flex flex-wrap gap-1.5 mb-6 sm:mb-8">
                 {project.stack.map((tech) => (
                   <span
                     key={tech}
@@ -99,7 +99,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-8 mb-8">
+              <div className="flex flex-wrap gap-4 sm:gap-8 mb-6 sm:mb-8">
                 {project.metrics.map((metric) => (
                   <p key={metric} className="text-sm font-mono text-ash">
                     {metric}
@@ -107,7 +107,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 ))}
               </div>
 
-              <div className="flex gap-6 pt-8 border-t border-mist">
+              <div className="flex gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-mist">
                 {project.github && (
                   <a
                     href={project.github}

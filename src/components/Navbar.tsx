@@ -17,9 +17,16 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const t = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(t);
+  }, []);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
+    handler();
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
@@ -28,11 +35,12 @@ export default function Navbar() {
     const sectionIds = navLinks.map((l) => l.id);
     const observers: IntersectionObserver[] = [];
 
-    const handleIntersect = (id: string) => (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) setActiveSection(id);
-      });
-    };
+    const handleIntersect =
+      (id: string) => (entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(id);
+        });
+      };
 
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
@@ -66,24 +74,23 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav
+      <nav
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+          visible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0",
           scrolled
-            ? "bg-cream/70 backdrop-blur-2xl border-b border-mist/60"
+            ? "bg-cream/80 backdrop-blur-2xl border-b border-mist/60"
             : "bg-transparent"
         )}
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        style={{ willChange: "transform" }}
       >
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-5 sm:px-6 h-12 sm:h-14 flex items-center justify-between">
           <a
             href="#"
             className="hover:opacity-70 transition-opacity leading-none"
           >
             <span
-              className="text-ink text-xl tracking-tight italic"
+              className="text-ink text-lg sm:text-xl tracking-tight italic"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               dp.
@@ -146,7 +153,7 @@ export default function Navbar() {
             />
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
       <AnimatePresence>
         {mobileOpen && (
@@ -157,14 +164,14 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <nav className="flex flex-col items-center gap-8">
+            <nav className="flex flex-col items-center gap-7">
               {navLinks.map((link, i) => (
                 <motion.a
                   key={link.href}
                   href={link.href}
                   onClick={() => handleNavClick(link.href)}
                   className={cn(
-                    "text-2xl font-medium",
+                    "text-xl font-medium",
                     activeSection === link.id ? "text-ink" : "text-ash"
                   )}
                   initial={{ opacity: 0, y: 16 }}

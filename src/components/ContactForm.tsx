@@ -44,7 +44,7 @@ export default function ContactForm() {
           <p className="font-mono text-[10px] text-stone tracking-[0.3em] uppercase mb-3">
             Contact
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-ink tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink tracking-tight">
             Let&apos;s connect
           </h2>
         </motion.div>

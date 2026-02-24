@@ -34,7 +34,7 @@ export default function About() {
               intersection
             </motion.h2>
             <motion.div
-              className="space-y-4 text-ash text-[15px] leading-relaxed"
+              className="space-y-3.5 sm:space-y-4 text-ash text-[13px] sm:text-[15px] leading-relaxed"
               initial={{ opacity: 0, y: 16 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.16 }}
@@ -59,7 +59,7 @@ export default function About() {
             </motion.div>
 
             <motion.div
-              className="grid grid-cols-2 gap-x-8 gap-y-6 mt-12"
+              className="grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-5 sm:gap-y-6 mt-8 sm:mt-12"
               initial={{ opacity: 0, y: 16 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.24 }}

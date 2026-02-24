@@ -22,12 +22,12 @@ export default function Writing() {
           <p className="font-mono text-[10px] text-stone tracking-[0.3em] uppercase mb-3">
             Writing
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-ink tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink tracking-tight">
             Notes &amp; thinking
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {blogPosts.map((post, i) => (
             <motion.a
               key={post.slug}

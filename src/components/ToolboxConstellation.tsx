@@ -30,13 +30,13 @@ export default function ToolboxConstellation() {
           <p className="font-mono text-[10px] text-stone tracking-[0.3em] uppercase mb-3">
             Toolbox
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-ink tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-ink tracking-tight">
             Skills &amp; systems
           </h2>
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap gap-2 mb-10"
+          className="flex flex-wrap gap-1.5 sm:gap-2 mb-8 sm:mb-10"
           initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1 }}
@@ -83,7 +83,7 @@ export default function ToolboxConstellation() {
                     layout: { type: "spring", stiffness: 350, damping: 30 },
                   }}
                 >
-                  <div className="px-3.5 py-2 rounded-lg border border-mist bg-warm-white text-[13px] text-charcoal font-mono hover:border-stone hover:text-ink transition-all duration-300 cursor-default">
+                  <div className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg border border-mist bg-warm-white text-[12px] sm:text-[13px] text-charcoal font-mono hover:border-stone hover:text-ink transition-all duration-300 cursor-default">
                     {skill}
                   </div>
                 </motion.div>
