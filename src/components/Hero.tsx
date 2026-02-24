@@ -22,7 +22,6 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 600], [1, 0]);
   const y = useTransform(scrollY, [0, 600], [0, 80]);
   const scale = useTransform(scrollY, [0, 600], [1, 0.96]);
-  const [letterSpacing, setLetterSpacing] = useState(0);
 
   const [introComplete, setIntroComplete] = useState(false);
   const [skipIntro, setSkipIntro] = useState(false);
@@ -42,16 +41,6 @@ export default function Hero() {
     setIntroComplete(true);
     sessionStorage.setItem("intro-seen", "true");
   }, []);
-
-  const handleScroll = useCallback(() => {
-    const spacing = Math.min(window.scrollY * 0.006, 3);
-    setLetterSpacing(spacing);
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
 
   const textDelay = skipIntro ? 0.1 : 0;
 
@@ -84,12 +73,12 @@ export default function Hero() {
           </motion.p>
 
           <motion.h1
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-[1.05] tracking-[-0.03em] text-ink kinetic-type"
-            style={{ letterSpacing: `${letterSpacing}px` }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl italic leading-[1.15] tracking-[-0.01em] text-ink"
+            style={{ fontFamily: "var(--font-serif)" }}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 1,
+              duration: 1.2,
               delay: textDelay + 0.2,
               ease: [0.16, 1, 0.3, 1],
             }}
@@ -98,7 +87,7 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            className="mt-5 text-[15px] sm:text-base text-ash max-w-lg mx-auto leading-[1.7]"
+            className="mt-6 text-[15px] sm:text-base text-ash max-w-lg mx-auto leading-[1.7]"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{

@@ -36,13 +36,14 @@ export interface SkillCategory {
 export const siteConfig = {
   name: "Darshil Patel",
   role: "CS × Economics",
-  headline: "I make systems think.",
+  headline: "One must imagine Sisyphus happy.",
   subtext:
-    "CS × Economics — shipping ML, agentic planning, and systems that hold up under pressure.",
+    "CS × Economics — ML, agentic planning, and systems that hold up under pressure.",
   email: "pateldarshil02@gmail.com",
   phone: "(224) 410-8786",
   github: "https://github.com/kittu54",
   linkedin: "https://linkedin.com/in/darshil-patel-587bba21b",
+  instagram: "https://instagram.com/darshiiil",
   resumeUrl: "/resume.pdf",
   location: "Lawrence, KS — open to SF & US roles",
   education: {
