@@ -56,6 +56,8 @@ const THEME_CONFIG = {
   dark: {
     materialColor: "#908474",
     settledOpacity: 0.45,
+    settledMetalness: 0.8,
+    settledRoughness: 0.3,
     ambientIntensity: 0.35,
     dirLight1: { color: "#e0d8ce", intensity: 1 },
     dirLight2: { color: "#b0a898", intensity: 0.5 },
@@ -63,13 +65,15 @@ const THEME_CONFIG = {
     particleColor: "#555560",
   },
   light: {
-    materialColor: "#6a5a4a",
-    settledOpacity: 0.55,
-    ambientIntensity: 0.6,
-    dirLight1: { color: "#c8c0b4", intensity: 1.2 },
-    dirLight2: { color: "#a8a090", intensity: 0.6 },
-    pointLight: { color: "#b8b0a0", intensity: 0.5 },
-    particleColor: "#8a8a90",
+    materialColor: "#a0a5ad",
+    settledOpacity: 0.6,
+    settledMetalness: 0.92,
+    settledRoughness: 0.15,
+    ambientIntensity: 0.7,
+    dirLight1: { color: "#e8eaf0", intensity: 1.4 },
+    dirLight2: { color: "#c0c4cc", intensity: 0.7 },
+    pointLight: { color: "#d0d4dc", intensity: 0.5 },
+    particleColor: "#9a9aa0",
   },
 };
 
@@ -175,8 +179,8 @@ function KineticSculpture({
 
     const scl = THREE.MathUtils.lerp(2.4, 2.0, settleP);
     const opa = THREE.MathUtils.lerp(0.95, themeConfig.settledOpacity, settleP);
-    const metal = THREE.MathUtils.lerp(0.95, 0.8, settleP);
-    const rough = THREE.MathUtils.lerp(0.08, 0.3, settleP);
+    const metal = THREE.MathUtils.lerp(0.95, themeConfig.settledMetalness, settleP);
+    const rough = THREE.MathUtils.lerp(0.08, themeConfig.settledRoughness, settleP);
 
     mat.opacity = opa;
     mat.metalness = metal;
@@ -203,8 +207,8 @@ function KineticSculpture({
       <mesh ref={meshRef} geometry={geometry} scale={skipIntro ? 2.0 : 2.4}>
         <meshStandardMaterial
           color={themeConfig.materialColor}
-          roughness={skipIntro ? 0.3 : 0.08}
-          metalness={skipIntro ? 0.8 : 0.95}
+          roughness={skipIntro ? themeConfig.settledRoughness : 0.08}
+          metalness={skipIntro ? themeConfig.settledMetalness : 0.95}
           transparent
           opacity={skipIntro ? themeConfig.settledOpacity : 0.95}
           side={THREE.DoubleSide}
