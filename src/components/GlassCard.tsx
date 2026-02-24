@@ -48,7 +48,7 @@ export default function GlassCard({ children, className, onClick }: GlassCardPro
       onClick={onClick}
       style={isTouch ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
       className={cn(
-        "group relative rounded-2xl border border-mist bg-warm-white p-5 sm:p-6 cursor-pointer transition-all duration-500 hover:border-stone/60 hover:shadow-lg hover:shadow-[var(--t-shadow)]",
+        "group relative rounded-2xl border border-mist bg-warm-white p-5 sm:p-6 cursor-pointer transition-all duration-500 hover:border-stone/60 hover:shadow-lg hover:shadow-[var(--t-shadow)] shadow-[var(--t-card-shadow)]",
         className
       )}
     >

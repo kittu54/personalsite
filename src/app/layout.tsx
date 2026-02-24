@@ -46,7 +46,7 @@ const themeScript = `
     }
     document.documentElement.setAttribute('data-theme', t);
     document.documentElement.style.colorScheme = t;
-    document.documentElement.style.backgroundColor = t === 'light' ? '#fafaf8' : '#09090b';
+    document.documentElement.style.backgroundColor = t === 'light' ? '#ffffff' : '#09090b';
   } catch(e){}
 })();
 `;

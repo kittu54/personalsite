@@ -83,7 +83,7 @@ export default function ToolboxConstellation() {
                     layout: { type: "spring", stiffness: 350, damping: 30 },
                   }}
                 >
-                  <div className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg border border-mist bg-warm-white text-[12px] sm:text-[13px] text-charcoal font-mono hover:border-stone hover:text-ink transition-all duration-300 cursor-default">
+                  <div className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg border border-mist bg-warm-white text-[12px] sm:text-[13px] text-charcoal font-mono hover:border-stone hover:text-ink transition-all duration-300 cursor-default shadow-[var(--t-card-shadow)]">
                     {skill}
                   </div>
                 </motion.div>
