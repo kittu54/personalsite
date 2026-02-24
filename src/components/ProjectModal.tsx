@@ -12,7 +12,9 @@ interface ProjectModalProps {
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   useEffect(() => {
     document.body.style.overflow = project ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [project]);
 
   useEffect(() => {
@@ -36,7 +38,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             onClick={onClose}
           />
           <motion.div
-            className="fixed inset-0 top-12 sm:inset-6 md:inset-10 lg:inset-y-12 lg:inset-x-24 xl:inset-x-40 z-50 bg-cream sm:border border-mist sm:rounded-2xl rounded-t-2xl overflow-y-auto"
+            className="fixed z-50 bg-cream overflow-y-auto
+              top-12 left-0 right-0 bottom-0 rounded-t-2xl
+              sm:top-6 sm:left-6 sm:right-6 sm:bottom-6 sm:rounded-2xl sm:border sm:border-mist
+              md:top-10 md:left-10 md:right-10 md:bottom-10
+              lg:top-12 lg:left-24 lg:right-24 lg:bottom-12
+              xl:left-40 xl:right-40"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 24 }}
@@ -54,15 +61,27 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-ink leading-tight tracking-tight">
                     {project.title}
                   </h2>
-                  <p className="mt-1.5 sm:mt-2 text-[13px] sm:text-base text-ash">{project.tagline}</p>
+                  <p className="mt-1.5 sm:mt-2 text-[13px] sm:text-base text-ash">
+                    {project.tagline}
+                  </p>
                 </div>
                 <button
                   onClick={onClose}
                   className="shrink-0 w-9 h-9 rounded-full border border-mist flex items-center justify-center text-ash hover:text-ink hover:border-stone transition-colors"
                   aria-label="Close"
                 >
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1L11 11M11 1L1 11"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </button>
               </div>

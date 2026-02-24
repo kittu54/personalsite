@@ -17,9 +17,14 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const [indicatorStyle, setIndicatorStyle] = useState({
+    left: 0,
+    width: 0,
+    opacity: 0,
+  });
   const navContainerRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
@@ -32,25 +37,31 @@ export default function Navbar() {
     const sectionIds = navLinks.map((l) => l.id);
     const observers: IntersectionObserver[] = [];
 
-    const handleIntersect =
-      (id: string) => (entries: IntersectionObserverEntry[]) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveSection(id);
-        });
-      };
-
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
-      const obs = new IntersectionObserver(handleIntersect(id), {
-        rootMargin: "-40% 0px -55% 0px",
-        threshold: 0,
-      });
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              clearTimeout(debounceRef.current);
+              debounceRef.current = setTimeout(
+                () => setActiveSection(id),
+                100
+              );
+            }
+          });
+        },
+        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+      );
       obs.observe(el);
       observers.push(obs);
     });
 
-    return () => observers.forEach((o) => o.disconnect());
+    return () => {
+      clearTimeout(debounceRef.current);
+      observers.forEach((o) => o.disconnect());
+    };
   }, []);
 
   useEffect(() => {
@@ -59,15 +70,22 @@ export default function Navbar() {
       return;
     }
     const linkEl = linkRefs.current[activeSection];
-    if (!linkEl || !navContainerRef.current) return;
+    const container = navContainerRef.current;
+    if (!linkEl || !container) return;
 
-    const containerRect = navContainerRef.current.getBoundingClientRect();
-    const linkRect = linkEl.getBoundingClientRect();
-    setIndicatorStyle({
-      left: linkRect.left - containerRect.left,
-      width: linkRect.width,
-      opacity: 1,
-    });
+    const measure = () => {
+      const cRect = container.getBoundingClientRect();
+      const lRect = linkEl.getBoundingClientRect();
+      setIndicatorStyle({
+        left: lRect.left - cRect.left,
+        width: lRect.width,
+        opacity: 1,
+      });
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, [activeSection]);
 
   const handleNavClick = useCallback(
@@ -88,9 +106,9 @@ export default function Navbar() {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-colors duration-500",
+          "fixed top-0 left-0 right-0 z-50",
           scrolled
-            ? "bg-cream/80 backdrop-blur-2xl border-b border-mist/60"
+            ? "bg-[#09090b] border-b border-mist/60"
             : "bg-transparent"
         )}
       >
@@ -107,9 +125,12 @@ export default function Navbar() {
             </span>
           </a>
 
-          <div ref={navContainerRef} className="hidden md:flex items-center gap-7 relative">
+          <div
+            ref={navContainerRef}
+            className="hidden md:flex items-center gap-7 relative"
+          >
             <span
-              className="absolute -bottom-[5px] h-px bg-ink/50 transition-all duration-300 ease-out"
+              className="absolute -bottom-[5px] h-px bg-ink/50 transition-all duration-300 ease-out pointer-events-none"
               style={{
                 left: indicatorStyle.left,
                 width: indicatorStyle.width,
@@ -120,7 +141,9 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                ref={(el) => { linkRefs.current[link.id] = el; }}
+                ref={(el) => {
+                  linkRefs.current[link.id] = el;
+                }}
                 onClick={() => handleNavClick(link.href)}
                 className={cn(
                   "text-[13px] transition-colors duration-300",
@@ -166,7 +189,7 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-cream/95 backdrop-blur-3xl flex items-center justify-center"
+            className="fixed inset-0 z-40 bg-[#09090b]/95 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
