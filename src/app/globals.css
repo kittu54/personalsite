@@ -81,6 +81,8 @@
 
 html {
   overflow-x: hidden;
+  background-color: var(--t-cream);
+  transition: background-color 0.4s ease;
 }
 
 @media (min-width: 768px) {
@@ -107,9 +109,8 @@ html.lenis, html.lenis body {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--t-cream);
   color: var(--t-charcoal);
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition: color 0.4s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
