@@ -34,7 +34,10 @@ export default function Navbar() {
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 50);
+    const handler = () => {
+      setScrolled(window.scrollY > 50);
+      if (window.scrollY < 200) setActiveSection(null);
+    };
     handler();
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
