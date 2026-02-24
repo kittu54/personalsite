@@ -45,6 +45,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!mounted) return;
     document.documentElement.setAttribute("data-theme", theme);
     document.documentElement.style.colorScheme = theme;
+    document.documentElement.style.removeProperty("background-color");
     localStorage.setItem("theme", theme);
   }, [theme, mounted]);
 
