@@ -29,7 +29,7 @@ export default function Hero() {
       window.innerWidth < 768;
   }, []);
 
-  const opacity = useTransform(scrollY, [0, 600], [1, 0]);
+  const textOpacity = useTransform(scrollY, [0, 500], [1, 0]);
   const y = useTransform(scrollY, (v) => {
     if (isMobileRef.current) return 0;
     return Math.min(v / 600, 1) * 80;
@@ -61,10 +61,8 @@ export default function Hero() {
   const textDelay = skipIntro ? 0.1 : 0;
 
   return (
-    <motion.div
-      style={{ opacity, y, scale }}
-      className="relative flex flex-col items-center justify-center px-5 sm:px-6 min-h-[calc(100svh-3rem)] md:min-h-screen"
-    >
+    <div className="relative flex flex-col items-center justify-center px-5 sm:px-6 min-h-[calc(100svh-3rem)] md:min-h-screen">
+      {/* 3D scene lives outside the fading wrapper so it never snaps */}
       <Suspense fallback={<div className="absolute inset-0 -z-10" />}>
         <Hero3D
           mouse={{ x: mouse.normalizedX, y: mouse.normalizedY }}
@@ -73,8 +71,12 @@ export default function Hero() {
         />
       </Suspense>
 
+      {/* Text content fades and shifts on scroll */}
       {introComplete && (
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <motion.div
+          style={{ opacity: textOpacity, y, scale }}
+          className="relative z-10 max-w-4xl mx-auto text-center"
+        >
           <motion.p
             className="font-mono text-[11px] text-stone tracking-[0.25em] uppercase mb-6"
             initial={{ opacity: 0, y: 16 }}
@@ -145,17 +147,15 @@ export default function Hero() {
               Resume
             </MagneticButton>
           </motion.div>
-        </div>
+        </motion.div>
       )}
 
       <motion.div
         className="absolute bottom-6 sm:bottom-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: introComplete ? 1 : 0 }}
-        transition={{ delay: skipIntro ? 0.8 : 0.6, duration: 1 }}
+        style={{ opacity: textOpacity }}
       >
-        <ScrollCue />
+        {introComplete && <ScrollCue />}
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
