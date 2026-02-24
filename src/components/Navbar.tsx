@@ -13,10 +13,10 @@ const navLinks = [
   { label: "Contact", href: "#contact", id: "contact" },
 ];
 
-function smoothScrollTo(href: string) {
+export function smoothScrollTo(href: string) {
   const el = document.querySelector(href);
   if (!el) return;
-  const top = el.getBoundingClientRect().top + window.scrollY - 60;
+  const top = el.getBoundingClientRect().top + window.scrollY - 56;
   window.scrollTo({ top, behavior: "smooth" });
 }
 
@@ -113,17 +113,14 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Mobile: sticky (in-flow, no iOS fixed bugs). Desktop: fixed (overlay). */}
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50",
+          "sticky top-0 z-50 md:fixed md:left-0 md:right-0",
           scrolled
             ? "bg-[#09090b] border-b border-mist/60"
-            : "bg-transparent"
+            : "bg-[#09090b] md:bg-transparent"
         )}
-        style={{
-          WebkitTransform: "translate3d(0,0,0)",
-          transform: "translate3d(0,0,0)",
-        }}
       >
         <div className="max-w-6xl mx-auto px-5 sm:px-6 h-12 sm:h-14 flex items-center justify-between">
           <a
@@ -213,10 +210,6 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            style={{
-              WebkitTransform: "translate3d(0,0,0)",
-              transform: "translate3d(0,0,0)",
-            }}
           >
             <nav className="flex flex-col items-center gap-7">
               {navLinks.map((link, i) => (

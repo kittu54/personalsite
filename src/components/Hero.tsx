@@ -13,6 +13,7 @@ import MagneticButton from "./MagneticButton";
 import ScrollCue from "./ScrollCue";
 import { siteConfig } from "@/data/content";
 import { useMousePosition } from "@/hooks/useMousePosition";
+import { smoothScrollTo } from "./Navbar";
 
 const Hero3D = lazy(() => import("./Hero3D"));
 
@@ -62,7 +63,7 @@ export default function Hero() {
   return (
     <motion.div
       style={{ opacity, y, scale }}
-      className="relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-6"
+      className="relative flex flex-col items-center justify-center px-5 sm:px-6 min-h-[calc(100svh-3rem)] md:min-h-screen"
     >
       <Suspense fallback={<div className="absolute inset-0 -z-10" />}>
         <Hero3D
@@ -124,7 +125,15 @@ export default function Hero() {
               ease: [0.16, 1, 0.3, 1],
             }}
           >
-            <MagneticButton as="a" href="#work" variant="primary">
+            <MagneticButton
+              as="a"
+              href="#work"
+              variant="primary"
+              onClick={(e) => {
+                e.preventDefault();
+                smoothScrollTo("#work");
+              }}
+            >
               View Work
             </MagneticButton>
             <MagneticButton
@@ -140,7 +149,7 @@ export default function Hero() {
       )}
 
       <motion.div
-        className="absolute bottom-10"
+        className="absolute bottom-6 sm:bottom-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: introComplete ? 1 : 0 }}
         transition={{ delay: skipIntro ? 0.8 : 0.6, duration: 1 }}

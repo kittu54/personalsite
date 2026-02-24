@@ -36,6 +36,16 @@
   }
 }
 
+html {
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -58,7 +68,6 @@ body {
   color: #b8b8be;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: clip;
 }
 
 ::selection {
