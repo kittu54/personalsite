@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -46,6 +47,7 @@ export default function RootLayout({
         style={{ backgroundColor: "#09090b", color: "#b8b8be" }}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
