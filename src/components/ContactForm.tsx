@@ -105,7 +105,7 @@ export default function ContactForm() {
                 href={link.href}
                 target={link.label === "Email" ? undefined : "_blank"}
                 rel={link.label === "Email" ? undefined : "noopener noreferrer"}
-                className="group flex items-center gap-4 px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border border-mist bg-warm-white hover:border-stone/50 transition-all duration-300 shadow-[var(--t-card-shadow)]"
+                className="group flex items-center gap-4 px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border border-mist bg-warm-white hover:border-stone/50 hover:shadow-[var(--t-card-shadow-hover)] transition-all duration-300 shadow-[var(--t-card-shadow)]"
                 initial={{ opacity: 0, y: 16 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{
