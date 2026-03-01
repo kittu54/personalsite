@@ -30,21 +30,12 @@ function LinkedInIcon() {
   );
 }
 
-function InstagramIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="5" />
-      <circle cx="12" cy="12" r="5" />
-      <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
+
 
 const iconMap: Record<string, React.FC> = {
   Email: MailIcon,
   GitHub: GitHubIcon,
   LinkedIn: LinkedInIcon,
-  Instagram: InstagramIcon,
 };
 
 const links = [
@@ -63,11 +54,7 @@ const links = [
     href: siteConfig.linkedin,
     display: "linkedin.com/in/darshil-patel",
   },
-  {
-    label: "Instagram",
-    href: siteConfig.instagram,
-    display: "@darshiiil",
-  },
+
 ];
 
 export default function ContactForm() {
